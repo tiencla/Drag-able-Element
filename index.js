@@ -4,13 +4,14 @@
 //* determine the new top left corner from new box position
 
 //* find the main container dimensions
-//* get top left dimensions
+//* get top left dimensions limit - (0,0)
 //* check if box is on the end of top left container
 //* get bottom right coordinates
 //* check if box is on the end of bottom right container
 
 (function () {
   const box = document.querySelector('#movable');
+  const container = document.querySelector('#container');
   const message = document.querySelector('#message');
 
   let mouseX,
@@ -20,6 +21,12 @@
       boxLeft,
       diffY,
       diffX;
+
+  const containerHeight = container.clientHeight; // // grab height of red container
+  const containerWidth =  container.clientWidth;    
+  const boxHeight = box.clientHeight;
+  const boxWidth = box.clientWidth;
+//   console.log(containerHeight)
 
   function mouseDown(event) {
     isMouseDown = true;
@@ -41,8 +48,19 @@
     const newMouseX = e.clientX;
     console.log(newMouseY, newMouseX);
 
-    const newBoxTop = newMouseY - diffY;
-    const newBoxLeft = newMouseX - diffX;
+    let newBoxTop = newMouseY - diffY; // //determine the new box top
+    let newBoxLeft = newMouseX - diffX;
+   
+    // // get the bottom right coordinates. bottom container = 500 - 150
+    let bottomContainerLimit = containerHeight - boxHeight;
+    let rightContainerLimit = containerWidth - boxWidth;
+
+    if (newBoxTop < 0) return newBoxTop = 0; // //if top is negative that means the box is going off the top container
+    if (newBoxLeft < 0) return newBoxLeft = 0;
+    
+    // // if newboxTop > bottomlimit reset it to bottom limit
+    if (newBoxTop > bottomContainerLimit) return newBoxTop = bottomContainerLimit;
+    if (newBoxLeft > rightContainerLimit) return newBoxLeft = rightContainerLimit;
 
     box.style.top = newBoxTop + 'px';
     box.style.left = newBoxLeft + 'px';
