@@ -9,44 +9,52 @@
 //* get bottom right coordinates
 //* check if box is on the end of bottom right container
 
-function moveMe() {
-  const box = document.querySelector('movable');
+(function () {
+  const box = document.querySelector('#movable');
+  const message = document.querySelector('#message');
 
   let mouseX,
-    mouseY,
-    isMouseDown = false,
-    boxTop,
-    boxLeft,
-    diffY,
-    diffX;
+      mouseY,
+      isMouseDown = false,
+      boxTop,
+      boxLeft,
+      diffY,
+      diffX;
 
   function mouseDown(event) {
     isMouseDown = true;
 
-    mouseX = event.clientX; // // clientX method to find horizontal coordinates
-    mouseY = event.clientY; // //clientY method to find vertical coordinates
+    const mouseY = event.clientY; // //clientY method to find vertical coordinates
+    const mouseX = event.clientX; // // clientX method to find horizontal coordinates
 
-    boxTop = box.offsetTop; // //distance to top left border of box
-    boxLeft = box.offsetLeft;
+    const boxTop = box.offsetTop; // //distance to top left border of box
+    const boxLeft = box.offsetLeft;
 
-    diffY = mouseY - boxTop; // //calculate distance from initial click to container top left
+    diffY = mouseY - boxTop; // //calculate distance from initial click to container top 
     diffX = mouseX - boxLeft;
   }
 
-  function mouseMove(event2) {
+  function mouseMove(e) {
     if (!isMouseDown) return; // //if mouse is not down dont return below
 
-    const newMouseX = event2.clientX;
-    const newMouseY = event2.clientY;
+    const newMouseY = e.clientY;
+    const newMouseX = e.clientX;
+    console.log(newMouseY, newMouseX);
 
-    console.log(newMouseX, newMouseY);
+    const newBoxTop = newMouseY - diffY;
+    const newBoxLeft = newMouseX - diffX;
+
+    box.style.top = newBoxTop + 'px';
+    box.style.left = newBoxLeft + 'px';
   }
-
+  
   function mouseUp() {
     isMouseDown = false;
+    // message.innerHTML = 'Move me pls O_O';
   }
 
   box.addEventListener('mousedown', mouseDown);
   document.addEventListener('mouseup', mouseUp);
   document.addEventListener('mousemove', mouseMove);
-}
+
+})();
